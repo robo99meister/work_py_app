@@ -7,6 +7,8 @@ fr = open('C:\python\JobExecute.1.txt')
 #出力ファイルは"logmod.txt"
 fw = open('C:\python\logcsv.csv','w')
 
+new_line_flag = 0
+
 line = fr.readline()
 while line:
     #tbpsOutputResult.c の列を検索
@@ -27,8 +29,10 @@ while line:
             fw.writelines(dline)
             dline = line.split(' ')[1] + ',MiddleDensity near edge,' + re.split('[(/,)]',line)[-3] + '\n'
             fw.writelines(dline)
-    elif -1 != line.find('tbpsMain() done.'):
+            new_line_flag = 1
+    elif -1 != line.find('tbpsMain() done.') and new_line_flag == 1:
         fw.writelines('e \n')
+        new_line_flag = 0
     line = fr.readline()
 
 fr.close()
