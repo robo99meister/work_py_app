@@ -4,6 +4,8 @@ fr = open('C:\python\JobExecute.1.txt')
 #出力ファイルは"logmod.txt"
 fw = open('C:\python\logcsv.csv','w')
 
+new_line_flag = 0
+
 line = fr.readline()
 while line:
     #Detect Toner in の列を検索
@@ -17,8 +19,10 @@ while line:
             #スペース区切りで2個目に時間情報、,区切りで後ろから3個目に検出数
             dline = line.split(' ')[1] + ',' + sline[: slcount -1]  + ',' + sline.split(',')[-3] + '\n'
             fw.writelines(dline)
-    elif -1 != line.find('tdtrMain() done.'):
+            new_line_flag = 1
+    elif -1 != line.find('tdtrMain() done.') and new_line_flag == 1:
         fw.writelines('\n')
+        new_line_flag = 0
     line = fr.readline()
 
 fr.close()
